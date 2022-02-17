@@ -1,0 +1,16 @@
+name: JustFishing
+main: net.sakuragame.eternal.fishing.JustFish
+version: ${project.version}
+author: 'Megumi'
+api-version: '1.13'
+depend:
+  - MegumiLib
+  - DragonCore
+  - UIFactory
+  - Zaphkiel
+
+commands:
+  jfish:
+    aliases:
+      - fish
+    description: show all command
