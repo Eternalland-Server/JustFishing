@@ -15,7 +15,7 @@ public class MessageFile {
     public static String noPermission;
 
     public static void init() {
-        message = JustFish.getInstance().getFileManager().getMessage();
+        message = JustFish.getFileManager().getMessage();
 
         help = getStringList("help");
         adminHelp = getStringList("admin-help");

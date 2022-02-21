@@ -1,1 +1,11 @@
-prefix: ' &8&l[&6&l亘古大陆&8&l]'
+prefix: ' &8&l[&6&l亘古大陆&8&l] &7'
+region: fishing
+licence:
+  - fishing_license_normal
+  - fishing_license_plus
+rod:
+  - fishing_rod_normal
+  - fishing_rod_plus
+stosh:
+  - stosh_normal
+  - stosh_plus

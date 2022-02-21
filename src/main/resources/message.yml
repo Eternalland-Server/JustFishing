@@ -1,6 +1,6 @@
 help:
-- '/template - 这是一个模板'
+- '/fish info - 查看钓鱼战绩'
 admin-help:
-- '/template admin - 这是一个模板'
+- '/fish reload - 重载配置文件'
 message:
   no-permission: '&3你没有权限: %s%'

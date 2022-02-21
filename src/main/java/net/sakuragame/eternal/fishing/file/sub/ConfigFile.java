@@ -11,10 +11,22 @@ public class ConfigFile {
 
     public static String prefix;
 
+    public static String region;
+
+    public static List<String> licence;
+    public static List<String> rod;
+    public static List<String> stosh;
+
     public static void init() {
-        config = JustFish.getInstance().getFileManager().getConfig();
+        config = JustFish.getFileManager().getConfig();
 
         prefix = getString("prefix");
+
+        region = config.getString("region");
+
+        licence = config.getStringList("licence");
+        rod = config.getStringList("rod");
+        stosh = config.getStringList("stosh");
     }
 
     private static String getString(String path) {
