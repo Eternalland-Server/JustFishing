@@ -44,7 +44,7 @@ public class PlayerListener implements Listener {
 
         FishAccount account = JustFishAPI.getAccount(player);
 
-        if (account == null) return;
+        if (account != null) return;
 
         e.setResult(PlayerLoginEvent.Result.KICK_OTHER);
         e.setKickMessage("账户数据加载有误，请重新进入游戏。");

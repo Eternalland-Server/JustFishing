@@ -132,7 +132,7 @@ public class Fishery {
         inFishing.add(player.getUniqueId());
         PacketSender.sendYaml(player, FolderType.Gui, SCREEN_ID, JustFish.getFileManager().getFishManual());
         PacketSender.sendOpenHud(player, SCREEN_ID);
-        stopFishingTask(player);
+        startFishingTask(player);
     }
 
     public static void startAutoFishing(Player player) {
