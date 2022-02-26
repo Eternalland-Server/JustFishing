@@ -1,0 +1,37 @@
+variables:
+  TARGET_DIR: /var/data/artifacts/$CI_PROJECT_NAME
+
+stages:
+  - build
+  - deploy
+
+build:
+  stage: build
+  tags:
+    - maven
+  script:
+    - mvn clean package -Dmaven.javadoc.skip=true
+  except:
+    - master
+    - main
+  artifacts:
+    paths:
+      - target/*.jar
+
+deploy:
+  # Deploy to repos
+  stage: deploy
+  tags:
+    - maven
+  script:
+    - mvn clean deploy -DskipTests
+    - mkdir -p $TARGET_DIR
+    - rm -rf $TARGET_DIR/*
+    - cp -vrf ./target/*.jar $TARGET_DIR/
+    - rm -vrf $TARGET_DIR/original*
+  only:
+    - master
+    - main
+  artifacts:
+    paths:
+      - target/*.jar
