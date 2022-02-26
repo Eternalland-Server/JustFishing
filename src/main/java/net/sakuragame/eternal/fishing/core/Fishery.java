@@ -1,9 +1,12 @@
 package net.sakuragame.eternal.fishing.core;
 
 import com.taylorswiftcn.justwei.util.MegumiUtil;
+import ink.ptms.zaphkiel.ZaphkielAPI;
 import net.sakuragame.eternal.dragoncore.config.FolderType;
 import net.sakuragame.eternal.dragoncore.network.PacketSender;
+import net.sakuragame.eternal.dragoncore.util.Pair;
 import net.sakuragame.eternal.fishing.JustFish;
+import net.sakuragame.eternal.fishing.core.task.ManualFishing;
 import net.sakuragame.eternal.fishing.file.sub.ConfigFile;
 import net.sakuragame.eternal.fishing.util.HookUtils;
 import net.sakuragame.eternal.fishing.util.Utils;
@@ -18,9 +21,13 @@ import java.util.*;
 public class Fishery {
 
     private final static JustFish plugin = JustFish.getInstance();
-    private final static Map<UUID, Fishing> scheduled = new HashMap<>();
+    private final static Map<UUID, ManualFishing> scheduled = new HashMap<>();
+
     private final static Map<UUID, String> useStosh = new HashMap<>();
     private final static Map<UUID, String> useLicence = new HashMap<>();
+
+    private final static Map<UUID, Long> autoFishingTime = new HashMap<>();
+
     private final static List<UUID> inFishing = new ArrayList<>();
 
     public final static String SCREEN_ID = "fish";
@@ -63,6 +70,7 @@ public class Fishery {
 
                     if (!state.equals("BOBBING")) return;
 
+                    putAutoFishingTime(player);
                     startAutoFishing(player);
                     cancel();
                 }
@@ -78,7 +86,7 @@ public class Fishery {
 
     public static void startFishingTask(Player player) {
         int goal = Utils.randomInt(70);
-        Fishing task = new Fishing(player, goal, 20);
+        ManualFishing task = new ManualFishing(player, goal, 20);
         task.runTaskTimer(plugin, 10, 10);
 
         scheduled.put(player.getUniqueId(), task);
@@ -89,9 +97,17 @@ public class Fishery {
     }
 
     public static void stopFishingTask(UUID uuid) {
-        Fishing task = scheduled.remove(uuid);
+        ManualFishing task = scheduled.remove(uuid);
         if (task == null) return;
         task.cancel();
+    }
+
+    public static void putAutoFishingTime(Player player) {
+        autoFishingTime.put(player.getUniqueId(), System.currentTimeMillis());
+    }
+
+    public static long getAutoFishingTime(Player player) {
+        return autoFishingTime.getOrDefault(player.getUniqueId(), 0L);
     }
 
     public static boolean consumeStosh(Player player) {
@@ -128,6 +144,22 @@ public class Fishery {
         return useLicence.get(player.getUniqueId());
     }
 
+    public static Pair<String, ItemStack> getCaughtFish(Player player) {
+        String rod = Utils.getPlayerHeldRod(player);
+        String useStosh = getUseStosh(player);
+        if (rod == null || useStosh == null) return null;
+
+        String fish = FishManager.caughtFish(rod, useStosh);
+
+        ItemStack item = ZaphkielAPI.INSTANCE.getItemStack(fish, player);
+        int amount = FishManager.getFishMultiple(getUseLicence(player));
+        if (item == null) return null;
+
+        item.setAmount(amount);
+
+        return new Pair<>(fish, item);
+    }
+
     public static void startManualFishing(Player player) {
         inFishing.add(player.getUniqueId());
         PacketSender.sendYaml(player, FolderType.Gui, SCREEN_ID, JustFish.getFileManager().getFishManual());
@@ -160,6 +192,7 @@ public class Fishery {
         stopFishingTask(uuid);
         useStosh.remove(uuid);
         useLicence.remove(uuid);
+        autoFishingTime.remove(uuid);
         inFishing.remove(uuid);
     }
 

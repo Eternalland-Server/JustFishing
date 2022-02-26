@@ -1,5 +1,6 @@
 prefix: ' &8&l[&6&l亘古大陆&8&l] &7'
 region: fishing
+auto-fishing-time: 12
 licence:
   - fishing_license_normal
   - fishing_license_plus

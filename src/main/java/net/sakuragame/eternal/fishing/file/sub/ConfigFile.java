@@ -13,6 +13,8 @@ public class ConfigFile {
 
     public static String region;
 
+    public static int autoFishingTime;
+
     public static List<String> licence;
     public static List<String> rod;
     public static List<String> stosh;
@@ -23,6 +25,8 @@ public class ConfigFile {
         prefix = getString("prefix");
 
         region = config.getString("region");
+
+        autoFishingTime = config.getInt("auto-fishing-time");
 
         licence = config.getStringList("licence");
         rod = config.getStringList("rod");

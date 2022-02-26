@@ -15,9 +15,9 @@ Functions:
     func.Function_Async_Execute('fishing');
   progress: |-
     var.start = func.Time_Current;
-    func.Component_Set('goal', 'width', '74*(func.Time_Current-var.start)/5000');
-    func.Component_Set('pointer', 'x', 'track.x+74*(func.Time_Current-var.start)/5000');
-    func.delay(5000);
+    func.Component_Set('goal', 'width', '74*(func.Time_Current-var.start)/12000');
+    func.Component_Set('pointer', 'x', 'track.x+74*(func.Time_Current-var.start)/12000');
+    func.delay(12000);
     func.Component_Set('goal', 'width', '74');
     func.Component_Set('pointer', 'x', 'track.x+74');
     func.Packet_Send('UIFCompSubmitEvent', var.screenID, 'result', '2');

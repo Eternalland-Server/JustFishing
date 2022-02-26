@@ -12,6 +12,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.UUID;
+
 public class SeatListener implements Listener {
 
     @EventHandler
@@ -23,9 +25,10 @@ public class SeatListener implements Listener {
     @EventHandler
     public void onLeave(FishSeatLeaveEvent e) {
         Player player = e.getPlayer();
-        if (!Fishery.inFishing(player)) return;
-        Fishery.stopFishing(player);
-        JustFish.getFishManager().saveAccount(player);
+        UUID uuid = player.getUniqueId();
+        if (!Fishery.inFishing(uuid)) return;
+        Fishery.clearData(uuid);
+        JustFish.getFishManager().saveAccount(uuid);
     }
 
     @EventHandler

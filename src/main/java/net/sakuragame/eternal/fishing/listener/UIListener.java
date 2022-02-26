@@ -2,7 +2,6 @@ package net.sakuragame.eternal.fishing.listener;
 
 import com.taylorswiftcn.megumi.uifactory.event.comp.UIFCompSubmitEvent;
 import com.taylorswiftcn.megumi.uifactory.generate.function.Statements;
-import ink.ptms.zaphkiel.ZaphkielAPI;
 import net.sakuragame.eternal.dragoncore.network.PacketSender;
 import net.sakuragame.eternal.dragoncore.util.Pair;
 import net.sakuragame.eternal.fishing.JustFish;
@@ -12,10 +11,10 @@ import net.sakuragame.eternal.fishing.api.event.FishStoshUseUpEvent;
 import net.sakuragame.eternal.fishing.core.FishManager;
 import net.sakuragame.eternal.fishing.core.FishResult;
 import net.sakuragame.eternal.fishing.core.Fishery;
+import net.sakuragame.eternal.fishing.file.sub.ConfigFile;
 import net.sakuragame.eternal.fishing.util.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.FishHook;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -83,6 +82,7 @@ public class UIListener implements Listener {
         }
 
         Fishery.stopFishing(player);
+        forbid.remove(player.getUniqueId());
     }
 
     @EventHandler
@@ -92,6 +92,7 @@ public class UIListener implements Listener {
         if (!e.getScreenID().equals(Fishery.SCREEN_ID)) return;
         if (!e.getCompID().equals("result")) return;
 
+        if (!Fishery.inFishing(uuid)) return;
         if (forbid.contains(uuid)) return;
 
         FishResult result = FishResult.match(e.getParams().getParamI(0));
@@ -121,10 +122,16 @@ public class UIListener implements Listener {
     private void autoDispose(Player player) {
         UUID uuid = player.getUniqueId();
 
-        if (!Fishery.inFishing(player)) return;
-        Fishery.stopFishingTask(player);
+        long startTime = Fishery.getAutoFishingTime(player);
+        if (startTime != 0) {
+            long now = System.currentTimeMillis();
+            if (now - startTime < ConfigFile.autoFishingTime * 1000L - 500) {
+                forbid.remove(uuid);
+                return;
+            }
+        }
 
-        Pair<String, ItemStack> caught = getCaughtFish(player);
+        Pair<String, ItemStack> caught = Fishery.getCaughtFish(player);
         if (caught == null) return;
 
         String fishID = caught.getKey();
@@ -144,6 +151,7 @@ public class UIListener implements Listener {
         Bukkit.getScheduler().runTaskLaterAsynchronously(JustFish.getInstance(), () -> {
             forbid.remove(uuid);
             if (Fishery.consumeStosh(player)) {
+                Fishery.putAutoFishingTime(player);
                 Statements restart = new Statements()
                         .add("func.Component_Set('goal', 'width', '0');")
                         .add("func.Component_Set('pointer', 'x', 'track.x');")
@@ -163,7 +171,7 @@ public class UIListener implements Listener {
 
         Fishery.stopFishingTask(player);
 
-        Pair<String, ItemStack> caught = getCaughtFish(player);
+        Pair<String, ItemStack> caught = Fishery.getCaughtFish(player);
         if (caught == null) return;
 
         String fishID = caught.getKey();
@@ -217,21 +225,5 @@ public class UIListener implements Listener {
                 useUpEvent.call();
             }
         }, 30);
-    }
-
-    private Pair<String, ItemStack> getCaughtFish(Player player) {
-        String rod = Utils.getPlayerHeldRod(player);
-        String useStosh = Fishery.getUseStosh(player);
-        if (rod == null || useStosh == null) return null;
-
-        String fish = FishManager.caughtFish(rod, useStosh);
-
-        ItemStack item = ZaphkielAPI.INSTANCE.getItemStack(fish, player);
-        int amount = FishManager.getFishMultiple(Fishery.getUseLicence(player));
-        if (item == null) return null;
-
-        item.setAmount(amount);
-
-        return new Pair<>(fish, item);
     }
 }
