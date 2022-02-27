@@ -49,6 +49,7 @@ public class UIListener implements Listener {
 
             if (!Utils.isFishRegion(player.getLocation())) {
                 player.sendMessage(ConfigFile.prefix + "请前往钓鱼场钓鱼");
+                e.setCancelled(true);
                 return;
             }
 
