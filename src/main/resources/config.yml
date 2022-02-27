@@ -10,3 +10,6 @@ rod:
 stosh:
   - stosh_normal
   - stosh_plus
+public-chair:
+  - PURPUR_STAIRS
+  - BIRCH_STAIRS

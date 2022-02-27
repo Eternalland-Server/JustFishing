@@ -7,6 +7,7 @@ import net.sakuragame.eternal.fishing.api.event.FishSeatLeaveEvent;
 import net.sakuragame.eternal.fishing.core.FishAccount;
 import net.sakuragame.eternal.fishing.core.FishManager;
 import net.sakuragame.eternal.fishing.core.Fishery;
+import net.sakuragame.eternal.fishing.file.sub.ConfigFile;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.ArmorStand;
@@ -68,7 +69,7 @@ public class PlayerListener implements Listener {
         if (action != Action.RIGHT_CLICK_BLOCK) return;
 
         if (chairBlock == null) return;
-        if (!chairBlock.getType().name().endsWith("_STAIRS")) return;
+        if (!ConfigFile.pubChair.contains(chairBlock.getType().name())) return;
 
         FishSeatEnterEvent.Pre preEvent = new FishSeatEnterEvent.Pre(player);
         preEvent.call();

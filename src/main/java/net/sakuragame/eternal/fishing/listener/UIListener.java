@@ -47,7 +47,13 @@ public class UIListener implements Listener {
         if (state == PlayerFishEvent.State.FISHING) {
             FishHook hook = e.getHook();
 
+            if (!Utils.isFishRegion(player.getLocation())) {
+                player.sendMessage(ConfigFile.prefix + "请前往钓鱼场钓鱼");
+                return;
+            }
+
             if (!FishManager.sitOnChair(player)) {
+                player.sendMessage(ConfigFile.prefix + "只有坐在椅子上才能钓鱼，请右键选择一把椅子");
                 e.setCancelled(true);
                 return;
             }
@@ -73,12 +79,14 @@ public class UIListener implements Listener {
         }
 
         if (state == PlayerFishEvent.State.BITE) {
+            e.setCancelled(true);
             return;
         }
 
         if (state == PlayerFishEvent.State.CAUGHT_FISH || state == PlayerFishEvent.State.CAUGHT_ENTITY) {
             Item item = (Item) e.getCaught();
             item.setItemStack(new ItemStack(Material.AIR));
+            return;
         }
 
         Fishery.stopFishing(player);
@@ -140,6 +148,8 @@ public class UIListener implements Listener {
 
         if (fishItem == null) return;
 
+        player.getInventory().addItem(fishItem);
+
         Statements statements = new Statements()
                 .add("func.Component_Set('icon', 'texture', '" + texture + "');")
                 .add("func.Component_Set('icon', 'visible', '1');");
@@ -179,6 +189,8 @@ public class UIListener implements Listener {
         String texture = FishManager.getTexture(fishID);
 
         if (fishItem == null) return;
+
+        player.getInventory().addItem(fishItem);
 
         Statements statements = new Statements()
                 .add("func.Component_Set('result', 'x', '" + pos + "');")
