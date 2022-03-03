@@ -20,8 +20,11 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -36,7 +39,25 @@ public class UIListener implements Listener {
     public void onSwap(PlayerItemHeldEvent e) {
         Player player = e.getPlayer();
         if (!Fishery.inFishing(player)) return;
+
         Fishery.stopFishing(player);
+        player.sendTitle("&3收杆喽~", "&7已停止钓鱼", 5, 20, 5);
+    }
+
+    @EventHandler
+    public void onClick(InventoryClickEvent e) {
+        if (e.isCancelled()) return;
+        if (!(e.getWhoClicked() instanceof Player)) return;
+
+        Player player = (Player) e.getWhoClicked();
+        Inventory gui = e.getInventory();
+
+        if (!(gui.getType() == InventoryType.PLAYER || gui.getType() == InventoryType.CRAFTING)) return;
+        if (player.getInventory().getHeldItemSlot() != e.getSlot()) return;
+        if (!Fishery.inFishing(player)) return;
+
+        Fishery.stopFishing(player);
+        player.sendTitle("&3收杆喽~", "&7已停止钓鱼", 5, 20, 5);
     }
 
     @EventHandler
@@ -91,6 +112,7 @@ public class UIListener implements Listener {
         }
 
         Fishery.stopFishing(player);
+        player.sendTitle("&3收杆喽~", "&7已停止钓鱼", 5, 20, 5);
         forbid.remove(player.getUniqueId());
     }
 

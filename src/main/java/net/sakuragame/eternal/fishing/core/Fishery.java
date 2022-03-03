@@ -79,7 +79,7 @@ public class Fishery {
             return true;
         }
         else {
-            player.sendMessage(ConfigFile.prefix + "鱼饵不足，请将鱼饵放在鱼竿右边一格开始钓鱼!");
+            player.sendMessage(ConfigFile.prefix + "鱼饵不足，请将鱼饵放在鱼竿同一行的物品栏再开始钓鱼!");
             return false;
         }
     }
@@ -111,25 +111,24 @@ public class Fishery {
     }
 
     public static boolean consumeStosh(Player player) {
-        int i = player.getInventory().getHeldItemSlot();
-        if (i == 8) return false;
+        for (int i = 0; i < 9; i++) {
+            ItemStack item = player.getInventory().getItem(i);
+            if (MegumiUtil.isEmpty(item)) continue;
 
-        int rawSlot = i + 1;
+            String stosh = Utils.getZapItemID(item);
+            if (stosh == null) continue;
+            if (!ConfigFile.stosh.contains(stosh)) continue;
 
-        ItemStack item = player.getInventory().getItem(rawSlot);
-        if (MegumiUtil.isEmpty(item)) return false;
+            int amount = FishManager.getStoshConsume(getUseLicence(player));
+            if (item.getAmount() < amount) continue;
 
-        String stosh = Utils.getZapItemID(item);
-        if (stosh == null) return false;
-        if (!ConfigFile.stosh.contains(stosh)) return false;
+            item.setAmount(item.getAmount() - amount);
 
-        int amount = FishManager.getStoshConsume(getUseLicence(player));
-        if (item.getAmount() < amount) return false;
+            useStosh.put(player.getUniqueId(), stosh);
+            return true;
+        }
 
-        item.setAmount(item.getAmount() - amount);
-
-        useStosh.put(player.getUniqueId(), stosh);
-        return true;
+        return false;
     }
 
     public static String getUseStosh(Player player) {
