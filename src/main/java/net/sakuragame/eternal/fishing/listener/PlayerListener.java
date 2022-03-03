@@ -18,6 +18,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.*;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.util.Vector;
 
 import java.util.UUID;
@@ -67,6 +68,7 @@ public class PlayerListener implements Listener {
         Block chairBlock = e.getClickedBlock();
         Action action = e.getAction();
         if (action != Action.RIGHT_CLICK_BLOCK) return;
+        if (e.getHand() != EquipmentSlot.HAND) return;
 
         if (chairBlock == null) return;
         if (!ConfigFile.pubChair.contains(chairBlock.getType().name())) return;
