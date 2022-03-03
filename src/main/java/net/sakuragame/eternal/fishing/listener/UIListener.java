@@ -13,6 +13,7 @@ import net.sakuragame.eternal.fishing.core.FishResult;
 import net.sakuragame.eternal.fishing.core.Fishery;
 import net.sakuragame.eternal.fishing.file.sub.ConfigFile;
 import net.sakuragame.eternal.fishing.util.Utils;
+import net.sakuragame.eternal.justmessage.api.MessageAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.FishHook;
@@ -41,7 +42,7 @@ public class UIListener implements Listener {
         if (!Fishery.inFishing(player)) return;
 
         Fishery.stopFishing(player);
-        player.sendTitle("&3收杆喽~", "&7已停止钓鱼", 5, 20, 5);
+        MessageAPI.sendActionTip(player, "&c&l已停止钓鱼");
     }
 
     @EventHandler
@@ -58,6 +59,8 @@ public class UIListener implements Listener {
 
         Fishery.stopFishing(player);
         player.sendTitle("&3收杆喽~", "&7已停止钓鱼", 5, 20, 5);
+
+        player.updateInventory();
     }
 
     @EventHandler
