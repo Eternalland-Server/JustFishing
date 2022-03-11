@@ -59,7 +59,7 @@ public class UIListener implements Listener {
         if (!Fishery.inFishing(player)) return;
 
         Fishery.stopFishing(player);
-        player.sendTitle("&3收杆喽~", "&7已停止钓鱼", 5, 20, 5);
+        player.sendTitle("§3收杆喽~", "§7已停止钓鱼", 5, 20, 5);
 
         player.updateInventory();
     }
@@ -98,6 +98,7 @@ public class UIListener implements Listener {
             else {
                 if (Fishery.getUseLicence(player) == null) {
                     player.sendMessage(ConfigFile.prefix + "你没有钓鱼许可证，请将许可证带在身上");
+                    e.setCancelled(true);
                     return;
                 }
 
