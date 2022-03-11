@@ -1,11 +1,12 @@
 package net.sakuragame.eternal.fishing.listener;
 
-import net.sakuragame.eternal.fishing.api.JustFishAPI;
 import net.sakuragame.eternal.fishing.api.event.FishAirForceEvent;
 import net.sakuragame.eternal.fishing.api.event.FishCaughtEvent;
 import net.sakuragame.eternal.fishing.api.event.FishStoshUseUpEvent;
-import net.sakuragame.eternal.fishing.core.FishAccount;
+import net.sakuragame.eternal.fishing.core.FishStats;
 import net.sakuragame.eternal.fishing.core.Fishery;
+import net.sakuragame.eternal.fishing.util.Scheduler;
+import net.sakuragame.eternal.jungle.JungleAPI;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,8 +20,7 @@ public class FishListener implements Listener {
         Player player = e.getPlayer();
         ItemStack fishItem = e.getFishItem();
 
-        FishAccount account = JustFishAPI.getAccount(player);
-        account.addAmount(1);
+        Scheduler.runAsync(() -> JungleAPI.addStatsValue(player.getUniqueId(), FishStats.Count.getIdentifier(), 1));
 
         player.sendTitle("§3§l上钩了!", "§e§l+ " + fishItem.getItemMeta().getDisplayName() + " §c§lx" + fishItem.getAmount(), 5, 20, 5);
         player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_YES, 1, 1);

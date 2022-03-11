@@ -7,8 +7,10 @@ depend:
   - MegumiLib
   - DragonCore
   - UIFactory
+  - EternalJungle
   - Zaphkiel
   - WorldGuard
+  - KirraTherm
 
 commands:
   jfish:

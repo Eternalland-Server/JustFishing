@@ -7,6 +7,8 @@ import net.sakuragame.eternal.fishing.api.event.FishSeatLeaveEvent;
 import net.sakuragame.eternal.fishing.core.Fishery;
 import net.sakuragame.eternal.fishing.file.sub.ConfigFile;
 import net.sakuragame.eternal.fishing.util.Utils;
+import net.sakuragame.eternal.kirratherm.event.PlayerThermJoinEvent;
+import net.sakuragame.eternal.kirratherm.event.PlayerThermQuitEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -28,7 +30,6 @@ public class SeatListener implements Listener {
         UUID uuid = player.getUniqueId();
         if (!Fishery.inFishing(uuid)) return;
         Fishery.clearData(uuid);
-        JustFish.getFishManager().saveAccount(uuid);
     }
 
     @EventHandler
@@ -42,6 +43,24 @@ public class SeatListener implements Listener {
             return;
         }
         Fishery.setUseLicence(player, licence);
+    }
+
+    @EventHandler
+    public void onJoin(PlayerThermJoinEvent e) {
+        Player player = e.getPlayer();
+
+        String licence = getFishLicence(player);
+        if (licence == null) return;
+
+        Fishery.setUseLicence(player, licence);
+    }
+
+    @EventHandler
+    public void onQuit(PlayerThermQuitEvent e) {
+        Player player = e.getPlayer();
+        UUID uuid = player.getUniqueId();
+        if (!Fishery.inFishing(uuid)) return;
+        Fishery.clearData(uuid);
     }
 
     private String getFishLicence(Player player) {

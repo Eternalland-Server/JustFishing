@@ -3,12 +3,12 @@ package net.sakuragame.eternal.fishing;
 import lombok.Getter;
 import net.sakuragame.eternal.fishing.commands.MainCommand;
 import net.sakuragame.eternal.fishing.core.FishManager;
+import net.sakuragame.eternal.fishing.core.FishStats;
 import net.sakuragame.eternal.fishing.file.FileManager;
 import net.sakuragame.eternal.fishing.listener.FishListener;
 import net.sakuragame.eternal.fishing.listener.SeatListener;
 import net.sakuragame.eternal.fishing.listener.UIListener;
 import net.sakuragame.eternal.fishing.listener.PlayerListener;
-import net.sakuragame.eternal.fishing.storage.StorageManager;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -19,7 +19,6 @@ public class JustFish extends JavaPlugin {
 
     @Getter private static FileManager fileManager;
     @Getter private static FishManager fishManager;
-    @Getter private static StorageManager storageManager;
 
     @Override
     public void onEnable() {
@@ -30,10 +29,9 @@ public class JustFish extends JavaPlugin {
         fileManager = new FileManager(this);
         fileManager.init();
 
-        storageManager = new StorageManager();
-        storageManager.init();
-
         fishManager = new FishManager();
+
+        FishStats.register();
 
         registerListener(new PlayerListener());
         registerListener(new UIListener());

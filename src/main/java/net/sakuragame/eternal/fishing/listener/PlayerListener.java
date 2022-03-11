@@ -1,10 +1,7 @@
 package net.sakuragame.eternal.fishing.listener;
 
-import net.sakuragame.eternal.fishing.JustFish;
-import net.sakuragame.eternal.fishing.api.JustFishAPI;
 import net.sakuragame.eternal.fishing.api.event.FishSeatEnterEvent;
 import net.sakuragame.eternal.fishing.api.event.FishSeatLeaveEvent;
-import net.sakuragame.eternal.fishing.core.FishAccount;
 import net.sakuragame.eternal.fishing.core.FishManager;
 import net.sakuragame.eternal.fishing.core.Fishery;
 import net.sakuragame.eternal.fishing.file.sub.ConfigFile;
@@ -17,40 +14,16 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.*;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.util.Vector;
 
 import java.util.UUID;
 
 public class PlayerListener implements Listener {
-
-    @EventHandler(priority = EventPriority.HIGH)
-    public void onFist(AsyncPlayerPreLoginEvent e) {
-        if (e.getLoginResult() != AsyncPlayerPreLoginEvent.Result.ALLOWED) return;
-
-        UUID uuid = e.getUniqueId();
-        JustFish.getFishManager().loadAccount(uuid);
-    }
-
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onSecond(AsyncPlayerPreLoginEvent e) {
-        if (e.getLoginResult() == AsyncPlayerPreLoginEvent.Result.ALLOWED) return;
-
-        JustFish.getFishManager().removeAccount(e.getUniqueId());
-    }
-
-    @EventHandler
-    public void onLogin(PlayerLoginEvent e) {
-        Player player = e.getPlayer();
-
-        FishAccount account = JustFishAPI.getAccount(player);
-
-        if (account != null) return;
-
-        e.setResult(PlayerLoginEvent.Result.KICK_OTHER);
-        e.setKickMessage("账户数据加载有误，请重新进入游戏。");
-    }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
@@ -59,7 +32,6 @@ public class PlayerListener implements Listener {
 
         Fishery.clearData(uuid);
         FishManager.removeChair(uuid);
-        JustFish.getFishManager().removeAccount(uuid);
     }
 
     @EventHandler

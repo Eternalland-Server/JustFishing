@@ -14,6 +14,7 @@ import net.sakuragame.eternal.fishing.core.Fishery;
 import net.sakuragame.eternal.fishing.file.sub.ConfigFile;
 import net.sakuragame.eternal.fishing.util.Utils;
 import net.sakuragame.eternal.justmessage.api.MessageAPI;
+import net.sakuragame.eternal.kirratherm.KirraThermAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.FishHook;
@@ -77,8 +78,10 @@ public class UIListener implements Listener {
                 return;
             }
 
-            if (!FishManager.sitOnChair(player)) {
-                player.sendMessage(ConfigFile.prefix + "只有坐在椅子上才能钓鱼，请右键选择一把椅子");
+            boolean selfChair = KirraThermAPI.INSTANCE.isPlayerOnSeat(player);
+
+            if (!(FishManager.sitOnChair(player) || selfChair)) {
+                player.sendMessage(ConfigFile.prefix + "只有坐在椅子上才能钓鱼，请右键选择一把公共椅子或者自带椅子钓鱼");
                 e.setCancelled(true);
                 return;
             }
@@ -86,13 +89,18 @@ public class UIListener implements Listener {
             String rod = Utils.getPlayerHeldRod(player);
             if (rod == null) return;
 
-            if (rod.equals("fishing_rod_normal")) {
+            if (!selfChair) {
                 if (!Fishery.manualFishing(player, hook)) {
                     e.setCancelled(true);
                     return;
                 }
             }
             else {
+                if (Fishery.getUseLicence(player) == null) {
+                    player.sendMessage(ConfigFile.prefix + "你没有钓鱼许可证，请将许可证带在身上");
+                    return;
+                }
+
                 if (!Fishery.autoFishing(player, hook)) {
                     e.setCancelled(true);
                     return;

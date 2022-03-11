@@ -12,8 +12,6 @@ import java.util.*;
 
 public class FishManager {
 
-    private final Map<UUID, FishAccount> account;
-
     private static Map<String, Pair<Integer, Integer>> licence;
     private static Map<String, String> texture;
     private static Map<String, Map<String, List<Pair<String, Double>>>> weight;
@@ -21,40 +19,9 @@ public class FishManager {
     private final static Map<UUID, Entity> chairs = new HashMap<>();
 
     public FishManager() {
-        this.account = new HashMap<>();
         this.loadLicence();
         this.loadTexture();
         this.loadWeight();
-    }
-
-    public void loadAccount(UUID uuid) {
-        FishAccount account = JustFish.getStorageManager().loadDate(uuid);
-        this.account.put(uuid, account);
-    }
-
-    public FishAccount getAccount(Player player) {
-        return getAccount(player.getUniqueId());
-    }
-
-    public FishAccount getAccount(UUID uuid) {
-        return account.get(uuid);
-    }
-
-    public void saveAccount(Player player) {
-        saveAccount(player.getUniqueId());
-    }
-
-    public void saveAccount(UUID uuid) {
-        FishAccount account = getAccount(uuid);
-        account.save();
-    }
-
-    public void removeAccount(Player player) {
-        removeAccount(player.getUniqueId());
-    }
-
-    public void removeAccount(UUID uuid) {
-        account.remove(uuid);
     }
 
     public static int getStoshConsume(String licenceID) {
