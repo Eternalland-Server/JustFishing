@@ -1,7 +1,6 @@
 package net.sakuragame.eternal.fishing.listener;
 
 import com.taylorswiftcn.justwei.util.MegumiUtil;
-import net.sakuragame.eternal.fishing.JustFish;
 import net.sakuragame.eternal.fishing.api.event.FishSeatEnterEvent;
 import net.sakuragame.eternal.fishing.api.event.FishSeatLeaveEvent;
 import net.sakuragame.eternal.fishing.core.Fishery;
@@ -29,6 +28,7 @@ public class SeatListener implements Listener {
         Player player = e.getPlayer();
         UUID uuid = player.getUniqueId();
         if (!Fishery.inFishing(uuid)) return;
+        Fishery.stopFishing(player);
         Fishery.clearData(uuid);
     }
 
@@ -60,6 +60,7 @@ public class SeatListener implements Listener {
         Player player = e.getPlayer();
         UUID uuid = player.getUniqueId();
         if (!Fishery.inFishing(uuid)) return;
+        Fishery.stopFishing(player);
         Fishery.clearData(uuid);
     }
 

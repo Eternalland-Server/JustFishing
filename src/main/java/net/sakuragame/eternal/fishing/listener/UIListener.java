@@ -124,7 +124,7 @@ public class UIListener implements Listener {
         }
 
         Fishery.stopFishing(player);
-        player.sendTitle("&3收杆喽~", "&7已停止钓鱼", 5, 20, 5);
+        player.sendTitle("§3收杆喽~", "§7已停止钓鱼", 5, 20, 5);
         forbid.remove(player.getUniqueId());
     }
 
