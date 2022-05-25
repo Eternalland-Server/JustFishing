@@ -72,12 +72,6 @@ public class UIListener implements Listener {
         if (state == PlayerFishEvent.State.FISHING) {
             FishHook hook = e.getHook();
 
-            if (!Utils.isFishRegion(player.getLocation())) {
-                player.sendMessage(ConfigFile.prefix + "请前往钓鱼场钓鱼");
-                e.setCancelled(true);
-                return;
-            }
-
             boolean selfChair = KirraThermAPI.INSTANCE.isPlayerOnSeat(player);
 
             if (!(FishManager.sitOnChair(player) || selfChair)) {

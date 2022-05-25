@@ -118,22 +118,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.sk89q.worldedit</groupId>
-            <artifactId>worldedit-bukkit</artifactId>
-            <version>6.2.2</version>
-            <scope>system</scope>
-            <systemPath>${pom.basedir}/.lib/worldedit-6.1.7.jar</systemPath>
-        </dependency>
-
-        <dependency>
-            <groupId>com.sk89q.worldguard</groupId>
-            <artifactId>worldguard-legacy</artifactId>
-            <version>6.2.2</version>
-            <scope>system</scope>
-            <systemPath>${pom.basedir}/.lib/worldguard-6.2.2.jar</systemPath>
-        </dependency>
-
-        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.22</version>

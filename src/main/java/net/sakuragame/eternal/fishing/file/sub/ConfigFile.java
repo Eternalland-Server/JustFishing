@@ -11,8 +11,6 @@ public class ConfigFile {
 
     public static String prefix;
 
-    public static String region;
-
     public static int autoFishingTime;
 
     public static List<String> licence;
@@ -24,8 +22,6 @@ public class ConfigFile {
         config = JustFish.getFileManager().getConfig();
 
         prefix = getString("prefix");
-
-        region = config.getString("region");
 
         autoFishingTime = config.getInt("auto-fishing-time");
 
