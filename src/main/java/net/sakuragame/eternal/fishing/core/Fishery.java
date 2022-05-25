@@ -10,6 +10,7 @@ import net.sakuragame.eternal.fishing.core.task.ManualFishing;
 import net.sakuragame.eternal.fishing.file.sub.ConfigFile;
 import net.sakuragame.eternal.fishing.util.HookUtils;
 import net.sakuragame.eternal.fishing.util.Utils;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.FishHook;
 import org.bukkit.entity.Player;
@@ -99,7 +100,7 @@ public class Fishery {
     public static void stopFishingTask(UUID uuid) {
         ManualFishing task = scheduled.remove(uuid);
         if (task == null) return;
-        task.cancel();
+        Bukkit.getScheduler().cancelTask(task.getTaskId());
     }
 
     public static void putAutoFishingTime(Player player) {
