@@ -75,7 +75,7 @@ public class UIListener implements Listener {
             boolean selfChair = KirraThermAPI.INSTANCE.isPlayerOnSeat(player);
 
             if (!(FishManager.sitOnChair(player) || selfChair)) {
-                player.sendMessage(ConfigFile.prefix + "只有坐在椅子上才能钓鱼，请右键选择一把公共椅子或者自带椅子钓鱼");
+                player.sendMessage(ConfigFile.prefix + "请右键选择选择一把公共椅子或者自带椅子进行钓鱼");
                 e.setCancelled(true);
                 return;
             }
@@ -158,6 +158,7 @@ public class UIListener implements Listener {
 
     private void autoDispose(Player player) {
         UUID uuid = player.getUniqueId();
+        if (!Fishery.inFishing(uuid)) return;
 
         long startTime = Fishery.getAutoFishingTime(player);
         if (startTime != 0) {
@@ -188,6 +189,8 @@ public class UIListener implements Listener {
         event.call();
 
         Bukkit.getScheduler().runTaskLaterAsynchronously(JustFish.getInstance(), () -> {
+            if (!Fishery.inFishing(uuid)) return;
+
             forbid.remove(uuid);
             if (Fishery.consumeStosh(player)) {
                 Fishery.putAutoFishingTime(player);
@@ -207,6 +210,7 @@ public class UIListener implements Listener {
 
     private void successDispose(Player player, int pos) {
         UUID uuid = player.getUniqueId();
+        if (!Fishery.inFishing(uuid)) return;
 
         Fishery.stopFishingTask(player);
 
@@ -230,7 +234,9 @@ public class UIListener implements Listener {
         FishCaughtEvent event = new FishCaughtEvent(player, fishID, fishItem);
         event.call();
 
-        Bukkit.getScheduler().runTaskLaterAsynchronously(JustFish.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskLater(JustFish.getInstance(), () -> {
+            if (!Fishery.inFishing(uuid)) return;
+
             forbid.remove(uuid);
             if (Fishery.consumeStosh(player)) {
                 Fishery.startFishingTask(player);
@@ -244,6 +250,7 @@ public class UIListener implements Listener {
 
     private void airForceDispose(Player player, int pos) {
         UUID uuid = player.getUniqueId();
+        if (!Fishery.inFishing(uuid)) return;
 
         Fishery.stopFishingTask(player);
 
@@ -256,7 +263,9 @@ public class UIListener implements Listener {
         FishAirForceEvent event = new FishAirForceEvent(player);
         event.call();
 
-        Bukkit.getScheduler().runTaskLaterAsynchronously(JustFish.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskLater(JustFish.getInstance(), () -> {
+            if (!Fishery.inFishing(uuid)) return;
+
             forbid.remove(uuid);
             if (Fishery.consumeStosh(player)) {
                 Fishery.startFishingTask(player);
