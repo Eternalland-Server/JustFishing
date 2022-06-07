@@ -18,6 +18,8 @@ public class ConfigFile {
     public static List<String> stosh;
     public static List<String> pubChair;
 
+    public static List<String> broadcastItem;
+
     public static void init() {
         config = JustFish.getFileManager().getConfig();
 
@@ -29,6 +31,7 @@ public class ConfigFile {
         rod = config.getStringList("rod");
         stosh = config.getStringList("stosh");
         pubChair = config.getStringList("public-chair");
+        broadcastItem = config.getStringList("broadcast-item");
     }
 
     private static String getString(String path) {
