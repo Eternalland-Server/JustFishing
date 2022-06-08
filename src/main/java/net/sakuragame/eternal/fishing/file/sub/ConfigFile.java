@@ -2,9 +2,12 @@ package net.sakuragame.eternal.fishing.file.sub;
 
 import com.taylorswiftcn.justwei.util.MegumiUtil;
 import net.sakuragame.eternal.fishing.JustFish;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ConfigFile {
     private static YamlConfiguration config;
@@ -18,7 +21,7 @@ public class ConfigFile {
     public static List<String> stosh;
     public static List<String> pubChair;
 
-    public static List<String> broadcastItem;
+    public static Map<String, String> broadcastItem;
 
     public static void init() {
         config = JustFish.getFileManager().getConfig();
@@ -31,7 +34,7 @@ public class ConfigFile {
         rod = config.getStringList("rod");
         stosh = config.getStringList("stosh");
         pubChair = config.getStringList("public-chair");
-        broadcastItem = config.getStringList("broadcast-item");
+        loadBroadcastItem();
     }
 
     private static String getString(String path) {
@@ -40,5 +43,16 @@ public class ConfigFile {
 
     private static List<String> getStringList(String path) {
         return MegumiUtil.onReplace(config.getStringList(path));
+    }
+
+    private static void loadBroadcastItem() {
+        broadcastItem = new HashMap<>();
+        ConfigurationSection section = config.getConfigurationSection("broadcast-item");
+        if (section == null) return;
+
+        for (String key : section.getKeys(false)) {
+            String s = section.getString(key);
+            broadcastItem.put(key, s.toUpperCase());
+        }
     }
 }
