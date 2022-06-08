@@ -6,10 +6,10 @@ import org.bukkit.inventory.ItemStack;
 
 public enum Broadcast {
 
-    A(new String[] {"⒜ §a恭喜玩家§7", "<player>", " §a钓起 ", "<item>", "§a 大家一起祝贺TA吧！"}),
-    B(new String[] {"⒝ §a恭喜玩家§7", "<player>",  "§a钓起 ", "<item>", "§a 大家一起祝贺TA吧！"}),
-    C(new String[] {"⒠ §a恭喜玩家§7", "<player>",  "§a钓起 ", "<item>", "§a 大家一起祝贺TA吧！"}),
-    D(new String[] {"⒟ §e恭喜玩家§7", "<player>",  "§e人品爆发!钓起 ", "<item>", "§e 大家一起祝贺TA吧！"});
+    A(new String[] {"⒜ §a恭喜§7", "<player>", " §a钓起 ", "<item>", "§a 大家一起祝贺TA吧！"}),
+    B(new String[] {"⒝ §a恭喜§7", "<player>",  "§a钓起 ", "<item>", "§a 大家一起祝贺TA吧！"}),
+    C(new String[] {"⒠ §a恭喜§7", "<player>",  "§a钓起 ", "<item>", "§a 大家一起祝贺TA吧！"}),
+    D(new String[] {"⒟ §e恭喜§7", "<player>",  "§e人品爆发!钓起 ", "<item>", "§e 大家一起祝贺TA吧！"});
 
 
     private final String[] args;
