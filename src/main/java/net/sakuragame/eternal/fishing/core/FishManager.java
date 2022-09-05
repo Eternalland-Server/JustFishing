@@ -45,8 +45,8 @@ public class FishManager {
         chairs.put(player.getUniqueId(), entity);
     }
 
-    public static Entity getChair(Player player) {
-        return chairs.get(player.getUniqueId());
+    public static boolean inChair(Player player) {
+        return chairs.containsKey(player.getUniqueId());
     }
 
     public static void removeChair(UUID uuid) {

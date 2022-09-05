@@ -10,8 +10,7 @@ stosh:
   - stosh_normal
   - stosh_plus
 public-chair:
-  - PURPUR_STAIRS
-  - BIRCH_STAIRS
+  - SKULL
 broadcast-item:
   blood_oath_fish_gift: A
   destiny_lament_fish_gift: B

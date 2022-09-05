@@ -44,6 +44,7 @@ public class PlayerListener implements Listener {
 
         if (chairBlock == null) return;
         if (!ConfigFile.pubChair.contains(chairBlock.getType().name())) return;
+        if (FishManager.inChair(player)) return;
 
         FishSeatEnterEvent.Pre preEvent = new FishSeatEnterEvent.Pre(player);
         preEvent.call();
