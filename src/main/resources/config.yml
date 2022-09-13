@@ -6,9 +6,6 @@ licence:
 rod:
   - fishing_rod_normal
   - fishing_rod_plus
-stosh:
-  - stosh_normal
-  - stosh_plus
 public-chair:
   - SKULL
 broadcast-item:

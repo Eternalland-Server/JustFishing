@@ -2,6 +2,9 @@ package net.sakuragame.eternal.fishing.core;
 
 import com.taylorswiftcn.justwei.util.MegumiUtil;
 import ink.ptms.zaphkiel.ZaphkielAPI;
+import ink.ptms.zaphkiel.api.ItemStream;
+import ink.ptms.zaphkiel.taboolib.module.nms.ItemTag;
+import ink.ptms.zaphkiel.taboolib.module.nms.ItemTagData;
 import net.sakuragame.eternal.dragoncore.config.FolderType;
 import net.sakuragame.eternal.dragoncore.network.PacketSender;
 import net.sakuragame.eternal.dragoncore.util.Pair;
@@ -23,18 +26,15 @@ public class Fishery {
 
     private final static JustFish plugin = JustFish.getInstance();
     private final static Map<UUID, ManualFishing> scheduled = new HashMap<>();
-
-    private final static Map<UUID, String> useStosh = new HashMap<>();
-    private final static Map<UUID, String> useLicence = new HashMap<>();
-
     private final static Map<UUID, Long> autoFishingTime = new HashMap<>();
 
     private final static List<UUID> inFishing = new ArrayList<>();
 
     public final static String SCREEN_ID = "fish";
+    private final static String NBT_NODE = "fish.bait";
 
     public static boolean manualFishing(Player player, FishHook hook) {
-        if (consumeStosh(player)) {
+        if (checkBait(player)) {
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -53,13 +53,13 @@ public class Fishery {
             return true;
         }
         else {
-            player.sendMessage(ConfigFile.prefix + "鱼饵不足，请将鱼饵放在鱼竿右边一格开始钓鱼!");
+            player.sendMessage(ConfigFile.prefix + "鱼饵用完了!");
             return false;
         }
     }
 
     public static boolean autoFishing(Player player, FishHook hook) {
-        if (consumeStosh(player)) {
+        if (checkBait(player)) {
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -80,7 +80,7 @@ public class Fishery {
             return true;
         }
         else {
-            player.sendMessage(ConfigFile.prefix + "鱼饵不足，请将鱼饵放在鱼竿同一行的物品栏再开始钓鱼!");
+            player.sendMessage(ConfigFile.prefix + "鱼饵用完了!");
             return false;
         }
     }
@@ -111,53 +111,49 @@ public class Fishery {
         return autoFishingTime.getOrDefault(player.getUniqueId(), 0L);
     }
 
-    public static boolean consumeStosh(Player player) {
-        for (int i = 0; i < 9; i++) {
-            ItemStack item = player.getInventory().getItem(i);
-            if (MegumiUtil.isEmpty(item)) continue;
-
-            String stosh = Utils.getZapItemID(item);
-            if (stosh == null) continue;
-            if (!ConfigFile.stosh.contains(stosh)) continue;
-
-            int amount = FishManager.getStoshConsume(getUseLicence(player));
-            if (item.getAmount() < amount) continue;
-
-            item.setAmount(item.getAmount() - amount);
-
-            useStosh.put(player.getUniqueId(), stosh);
-            return true;
-        }
-
-        return false;
+    public static boolean checkBait(Player player) {
+        ItemStack rodItem = player.getInventory().getItemInMainHand();
+        ItemStream stream = ZaphkielAPI.INSTANCE.read(rodItem);
+        ItemTag tag = stream.getZaphkielData();
+        ItemTagData data = tag.getDeep(NBT_NODE);
+        return data != null;
     }
 
-    public static String getUseStosh(Player player) {
-        return useStosh.remove(player.getUniqueId());
-    }
+    public static void consumeBait(Player player) {
+        ItemStack rodItem = player.getInventory().getItemInMainHand();
+        ItemStream rodStream = ZaphkielAPI.INSTANCE.read(rodItem);
+        ItemTag tag = rodStream.getZaphkielData();
 
-    public static void setUseLicence(Player player, String licence) {
-        useLicence.put(player.getUniqueId(), licence);
-    }
+        ItemTagData data = tag.getDeep(NBT_NODE);
+        if (data == null) return;
 
-    public static String getUseLicence(Player player) {
-        return useLicence.get(player.getUniqueId());
+        String s = data.asString();
+        String bait = s.split("\\|", 2)[0];
+        int amount = Integer.parseInt(s.split("\\|", 2)[1]);
+        amount--;
+        if (amount <= 0) tag.removeDeep(NBT_NODE);
+        else tag.putDeep(NBT_NODE, bait + "|" + amount);
+        player.getInventory().setItemInMainHand(rodStream.rebuildToItemStack(player));
     }
 
     public static Pair<String, ItemStack> getCaughtFish(Player player) {
-        String rod = Utils.getPlayerHeldRod(player);
-        String useStosh = getUseStosh(player);
-        if (rod == null || useStosh == null) return null;
+        ItemStack rodItem = player.getInventory().getItemInMainHand();
+        ItemStream rodStream = ZaphkielAPI.INSTANCE.read(rodItem);
+        ItemTag tag = rodStream.getZaphkielData();
 
-        String fish = FishManager.caughtFish(rod, useStosh);
+        String rod = rodStream.getZaphkielName();
+        ItemTagData data = tag.getDeep(NBT_NODE);
+        if (data == null) return null;
 
-        ItemStack item = ZaphkielAPI.INSTANCE.getItemStack(fish, player);
-        int amount = FishManager.getFishMultiple(getUseLicence(player));
-        if (item == null) return null;
+        String s = data.asString();
+        String bait = s.split("\\|", 2)[0];
+        int amount = Integer.parseInt(s.split("\\|", 2)[1]);
+        amount--;
+        if (amount <= 0) tag.removeDeep(NBT_NODE);
+        else tag.putDeep(NBT_NODE, bait + "|" + amount);
+        player.getInventory().setItemInMainHand(rodStream.rebuildToItemStack(player));
 
-        item.setAmount(amount);
-
-        return new Pair<>(fish, item);
+        return FishManager.caughtFish(rod, bait);
     }
 
     public static void startManualFishing(Player player) {
@@ -190,8 +186,6 @@ public class Fishery {
 
     public static void clearData(UUID uuid) {
         stopFishingTask(uuid);
-        useStosh.remove(uuid);
-        useLicence.remove(uuid);
         autoFishingTime.remove(uuid);
         inFishing.remove(uuid);
     }

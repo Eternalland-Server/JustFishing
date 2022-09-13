@@ -78,6 +78,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onSneak(PlayerToggleSneakEvent e) {
+        if (!e.isSneaking()) return;
         Player player = e.getPlayer();
         FishManager.removeChair(player.getUniqueId());
 

@@ -1,10 +1,3 @@
-licence:
-  fishing_license_normal:
-    stosh: 1
-    fish: 1
-  fishing_license_plus:
-    stosh: 2
-    fish: 2
 texture:
   fish_drop_1: icon/prop/100/121.png
   fish_drop_2: icon/prop/100/122.png
@@ -19,36 +12,28 @@ texture:
   destiny_lament_fish_gift: icon/prop/700/1.png
   limit_break_fish_gift: icon/prop/700/2.png
 weight:
-  fishing_rod_normal:
-    stosh_normal:
-      fish_drop_1: 25
-      fish_drop_2: 25
-      fish_drop_3: 24
-      fish_drop_4: 24
-      blood_oath_fish_gift: 2
-    stosh_plus:
-      fish_drop_1: 18
-      fish_drop_2: 18
-      fish_drop_3: 18
-      fish_drop_4: 15
-      fish_drop_5: 15
-      fish_drop_6: 10
-      blood_oath_fish_gift: 4
-      destiny_lament_fish_gift: 2
-  fishing_rod_plus:
-    stosh_normal:
-      fish_drop_3: 33
-      fish_drop_4: 33
-      fish_drop_5: 24
-      fish_drop_6: 8
-      limit_break_fish_gift: 2
-    stosh_plus:
-      fish_drop_3: 260
-      fish_drop_4: 240
-      fish_drop_5: 220
-      fish_drop_6: 122
-      fish_drop_7: 72
-      fish_drop_8: 35
-      fish_drop_9: 10
-      limit_break_fish_gift: 40
-      chaos_bead: 1
+  stosh_normal:
+    fish_drop_1: 350 # 35%
+    fish_drop_2: 240 # 24%
+    fish_drop_3: 130 # 13%
+    fish_drop_4: 100 # 10%
+    fish_drop_5: 76 # 7.6%
+    fish_drop_6: 50 # 5%
+    fish_drop_7: 21 # 2.1%
+    fish_drop_8: 8 # 0.8%
+    fish_drop_9: 1 # 0.1%
+    blood_oath_fish_gift: 12 # 1.2%
+    destiny_lament_fish_gift: 8 # 0.8%
+    limit_break_fish_gift: 4 # 0.4%
+  stosh_plus:
+    fish_drop_2: 340 # 34%
+    fish_drop_3: 220 # 22%
+    fish_drop_4: 150 # 15%
+    fish_drop_5: 120 # 12%
+    fish_drop_6: 79 # 7.9%
+    fish_drop_7: 36 # 3.6%
+    fish_drop_8: 18 # 1.8%
+    fish_drop_9: 3 # 0.3%
+    blood_oath_fish_gift: 16 # 1.6%
+    destiny_lament_fish_gift: 12 # 1.2%
+    limit_break_fish_gift: 6 # 0.6%

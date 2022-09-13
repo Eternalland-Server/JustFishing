@@ -18,7 +18,6 @@ public class ConfigFile {
 
     public static List<String> licence;
     public static List<String> rod;
-    public static List<String> stosh;
     public static List<String> pubChair;
 
     public static Map<String, String> broadcastItem;
@@ -32,7 +31,6 @@ public class ConfigFile {
 
         licence = config.getStringList("licence");
         rod = config.getStringList("rod");
-        stosh = config.getStringList("stosh");
         pubChair = config.getStringList("public-chair");
         loadBroadcastItem();
     }

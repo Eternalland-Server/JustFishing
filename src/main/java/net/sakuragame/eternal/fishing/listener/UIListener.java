@@ -21,6 +21,7 @@ import org.bukkit.entity.FishHook;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
@@ -64,10 +65,12 @@ public class UIListener implements Listener {
         player.updateInventory();
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onFish(PlayerFishEvent e) {
         Player player = e.getPlayer();
         PlayerFishEvent.State state = e.getState();
+
+        if (e.isCancelled()) e.setCancelled(false);
 
         if (state == PlayerFishEvent.State.FISHING) {
             FishHook hook = e.getHook();
@@ -90,12 +93,6 @@ public class UIListener implements Listener {
                 }
             }
             else {
-                if (Fishery.getUseLicence(player) == null) {
-                    player.sendMessage(ConfigFile.prefix + "你没有钓鱼许可证，请将许可证带在身上");
-                    e.setCancelled(true);
-                    return;
-                }
-
                 if (!Fishery.autoFishing(player, hook)) {
                     e.setCancelled(true);
                     return;
@@ -192,7 +189,7 @@ public class UIListener implements Listener {
             if (!Fishery.inFishing(uuid)) return;
 
             forbid.remove(uuid);
-            if (Fishery.consumeStosh(player)) {
+            if (Fishery.checkBait(player)) {
                 Fishery.putAutoFishingTime(player);
                 Statements restart = new Statements()
                         .add("func.Component_Set('goal', 'width', '0');")
@@ -238,7 +235,7 @@ public class UIListener implements Listener {
             if (!Fishery.inFishing(uuid)) return;
 
             forbid.remove(uuid);
-            if (Fishery.consumeStosh(player)) {
+            if (Fishery.checkBait(player)) {
                 Fishery.startFishingTask(player);
             }
             else {
@@ -253,6 +250,7 @@ public class UIListener implements Listener {
         if (!Fishery.inFishing(uuid)) return;
 
         Fishery.stopFishingTask(player);
+        Fishery.consumeBait(player);
 
         Statements statements = new Statements()
                 .add("func.Component_Set('result', 'x', '" + pos + "');")
@@ -267,7 +265,7 @@ public class UIListener implements Listener {
             if (!Fishery.inFishing(uuid)) return;
 
             forbid.remove(uuid);
-            if (Fishery.consumeStosh(player)) {
+            if (Fishery.checkBait(player)) {
                 Fishery.startFishingTask(player);
             }
             else {

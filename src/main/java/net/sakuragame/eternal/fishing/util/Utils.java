@@ -54,17 +54,6 @@ public class Utils {
         return rodID;
     }
 
-    public static String getPlayerUseStosh(Player player) {
-        int i = player.getInventory().getHeldItemSlot();
-        if (i == 8) return null;
-
-        ItemStack item = player.getInventory().getItem(i + 37);
-        String stoshID = getZapItemID(item);
-        if (!ConfigFile.stosh.contains(stoshID)) return null;
-
-        return stoshID;
-    }
-
     public static String getZapItemID(ItemStack item) {
         if (MegumiUtil.isEmpty(item)) return null;
 
