@@ -11,6 +11,8 @@ depend:
   - Zaphkiel
   - WorldGuard
   - KirraTherm
+  - JustMessage
+  - JustLevel
 
 commands:
   jfish:

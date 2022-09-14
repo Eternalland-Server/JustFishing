@@ -37,3 +37,13 @@ weight:
     blood_oath_fish_gift: 16 # 1.6%
     destiny_lament_fish_gift: 12 # 1.2%
     limit_break_fish_gift: 6 # 0.6%
+exp:
+  fish_drop_1: '40 60'
+  fish_drop_2: '50 80'
+  fish_drop_3: '100 120'
+  fish_drop_4: '120 160'
+  fish_drop_5: '200 300'
+  fish_drop_6: '300 500'
+  fish_drop_7: '500 800'
+  fish_drop_8: '1000 1500'
+  fish_drop_9: '10000 10999'

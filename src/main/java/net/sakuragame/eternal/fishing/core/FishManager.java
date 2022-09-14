@@ -16,12 +16,14 @@ public class FishManager {
 
     private static Map<String, String> texture;
     private static Map<String, List<Pair<String, Double>>> weight;
+    private static Map<String, Pair<Integer, Integer>> exp;
 
     private final static Map<UUID, Entity> chairs = new HashMap<>();
 
     public FishManager() {
         this.loadTexture();
         this.loadWeight();
+        this.loadExp();
     }
 
     public static Pair<String, ItemStack> caughtFish(String rod, String bait) {
@@ -66,6 +68,12 @@ public class FishManager {
         return false;
     }
 
+    public static double getFishExp(String id) {
+        if (!exp.containsKey(id)) return -1;
+        Pair<Integer, Integer> scope = exp.get(id);
+        return scope.getKey() + (scope.getValue() * Math.random());
+    }
+
     private void loadTexture() {
         texture = new HashMap<>();
         YamlConfiguration yaml = JustFish.getFileManager().getSetting();
@@ -94,6 +102,20 @@ public class FishManager {
             }
 
             weight.put(s, pairs);
+        }
+    }
+
+    private void loadExp() {
+        exp = new HashMap<>();
+        YamlConfiguration yaml = JustFish.getFileManager().getSetting();
+        ConfigurationSection section = yaml.getConfigurationSection("exp");
+        if (section == null) return;
+
+        for (String s : section.getKeys(false)) {
+            String args = section.getString(s);
+            int min = Integer.parseInt(args.split(" ", 2)[0]);
+            int max = Integer.parseInt(args.split(" ", 2)[1]);
+            exp.put(s, new Pair<>(min, max));
         }
     }
 }
