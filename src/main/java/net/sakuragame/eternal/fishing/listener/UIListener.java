@@ -7,7 +7,7 @@ import net.sakuragame.eternal.dragoncore.util.Pair;
 import net.sakuragame.eternal.fishing.JustFish;
 import net.sakuragame.eternal.fishing.api.event.FishAirForceEvent;
 import net.sakuragame.eternal.fishing.api.event.FishCaughtEvent;
-import net.sakuragame.eternal.fishing.api.event.FishStoshUseUpEvent;
+import net.sakuragame.eternal.fishing.api.event.FishBaitUseUpEvent;
 import net.sakuragame.eternal.fishing.core.FishManager;
 import net.sakuragame.eternal.fishing.core.FishResult;
 import net.sakuragame.eternal.fishing.core.Fishery;
@@ -199,7 +199,7 @@ public class UIListener implements Listener {
                 PacketSender.sendRunFunction(player, Fishery.SCREEN_ID, restart.build(), false);
             }
             else {
-                FishStoshUseUpEvent useUpEvent = new FishStoshUseUpEvent(player);
+                FishBaitUseUpEvent useUpEvent = new FishBaitUseUpEvent(player);
                 useUpEvent.call();
             }
         }, 30);
@@ -239,7 +239,7 @@ public class UIListener implements Listener {
                 Fishery.startFishingTask(player);
             }
             else {
-                FishStoshUseUpEvent useUpEvent = new FishStoshUseUpEvent(player);
+                FishBaitUseUpEvent useUpEvent = new FishBaitUseUpEvent(player);
                 useUpEvent.call();
             }
         }, 30);
@@ -269,7 +269,7 @@ public class UIListener implements Listener {
                 Fishery.startFishingTask(player);
             }
             else {
-                FishStoshUseUpEvent useUpEvent = new FishStoshUseUpEvent(player);
+                FishBaitUseUpEvent useUpEvent = new FishBaitUseUpEvent(player);
                 useUpEvent.call();
             }
         }, 30);

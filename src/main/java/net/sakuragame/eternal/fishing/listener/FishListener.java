@@ -2,7 +2,7 @@ package net.sakuragame.eternal.fishing.listener;
 
 import net.sakuragame.eternal.fishing.api.event.FishAirForceEvent;
 import net.sakuragame.eternal.fishing.api.event.FishCaughtEvent;
-import net.sakuragame.eternal.fishing.api.event.FishStoshUseUpEvent;
+import net.sakuragame.eternal.fishing.api.event.FishBaitUseUpEvent;
 import net.sakuragame.eternal.fishing.core.Broadcast;
 import net.sakuragame.eternal.fishing.core.FishManager;
 import net.sakuragame.eternal.fishing.core.FishStats;
@@ -51,7 +51,7 @@ public class FishListener implements Listener {
     }
 
     @EventHandler
-    public void onUseUp(FishStoshUseUpEvent e) {
+    public void onUseUp(FishBaitUseUpEvent e) {
         Player player = e.getPlayer();
 
         player.sendTitle("§c§l鱼饵用完了!", "", 5, 20, 5);
